@@ -1,4 +1,4 @@
-# Raiz CRM
+# Xavier CRM
 
 CRM de vendas em português para uma equipe pequena, com painel financeiro, pipeline e prospecção local no Riacho Fundo II.
 

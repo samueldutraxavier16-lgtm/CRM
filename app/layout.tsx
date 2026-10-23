@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Raiz CRM | Vendas com direção",
+  title: "Xavier CRM",
   description: "Clientes, oportunidades e prospecção local em um só lugar.",
 };
 

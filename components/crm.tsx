@@ -178,12 +178,12 @@ export default function CRM() {
 
   const savedDeals = opportunities.filter(item => item.isSaved !== false).sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 
-  if (isSupabaseConfigured && authReady && !user) return <main className="auth-screen"><div className="auth-card"><div className="brand-mark">r.</div><span className="eyebrow">RAIZ CRM · ESPAÇO DA EQUIPE</span><h1>Vendas com<br/><em>direção.</em></h1><p>Acesse com o e-mail que recebeu um convite da equipe.</p>{magicSent ? <div className="sent-box"><BadgeCheck size={20}/> Link enviado. Confira sua caixa de entrada e volte para continuar.</div> : <form onSubmit={sendLink}><label htmlFor="login-email">Seu e-mail</label><div className="input-icon"><Mail size={17}/><input id="login-email" type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="voce@empresa.com.br" /></div><button className="primary full" disabled={busy}>{busy ? "Enviando…" : "Receber link de acesso"}<ArrowRight size={16}/></button></form>}{notice && <div className="notice error">{notice}</div>}<small>O acesso é liberado apenas para contas convidadas no Supabase.</small></div></main>;
-  if (isSupabaseConfigured && !authReady) return <main className="loading-screen"><div className="brand-mark">r.</div><span>Preparando seu espaço…</span></main>;
+  if (isSupabaseConfigured && authReady && !user) return <main className="auth-screen"><div className="auth-card"><div className="brand-mark"><CircleDollarSign size={25}/></div><span className="eyebrow">XAVIER CRM · ESPAÇO DA EQUIPE</span><h1>Vendas com<br/><em>direção.</em></h1><p>Acesse com o e-mail que recebeu um convite da equipe.</p>{magicSent ? <div className="sent-box"><BadgeCheck size={20}/> Link enviado. Confira sua caixa de entrada e volte para continuar.</div> : <form onSubmit={sendLink}><label htmlFor="login-email">Seu e-mail</label><div className="input-icon"><Mail size={17}/><input id="login-email" type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="voce@empresa.com.br" /></div><button className="primary full" disabled={busy}>{busy ? "Enviando…" : "Receber link de acesso"}<ArrowRight size={16}/></button></form>}{notice && <div className="notice error">{notice}</div>}<small>O acesso é liberado apenas para contas convidadas no Supabase.</small></div></main>;
+  if (isSupabaseConfigured && !authReady) return <main className="loading-screen"><div className="brand-mark"><CircleDollarSign size={25}/></div><span>Preparando seu espaço…</span></main>;
 
   return <main className="app-shell dark-theme">
     <aside className={`sidebar ${mobileNav ? "sidebar-open" : ""}`}>
-      <div className="brand"><div className="brand-mark"><CircleDollarSign size={25} strokeWidth={2.5}/></div><div><strong>Suas vendas</strong><span>CRM DE VENDAS</span></div></div>
+      <div className="brand"><div className="brand-mark"><CircleDollarSign size={25} strokeWidth={2.5}/></div><div><strong>Xavier CRM</strong></div></div>
       <div className="workspace"><div className="workspace-avatar">RF</div><div><b>Equipe comercial</b><small>Riacho Fundo II · DF</small></div><ChevronDown size={15}/></div>
       <div className="nav-label">ESPAÇO DE TRABALHO</div>
       <nav>
@@ -232,7 +232,7 @@ export default function CRM() {
             <div className="source-note"><BadgeCheck size={15}/><span>Contatos encontrados em fontes públicas. Confirme o telefone antes do primeiro contato; os dados podem mudar.</span></div>
           </div>
         </>}
-        <footer className="page-footer"><span>RAIZ CRM</span><span>Feito para conversas que viram negócio <span className="footer-flower">✳</span></span></footer>
+        <footer className="page-footer"><span>XAVIER CRM</span><span>Feito para conversas que viram negócio <span className="footer-flower">✳</span></span></footer>
       </div>
     </section>
     {mobileNav && <button className="mobile-scrim" onClick={() => setMobileNav(false)} aria-label="Fechar menu"/>}
