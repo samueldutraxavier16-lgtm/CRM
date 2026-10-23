@@ -67,3 +67,23 @@
 .dark-theme .deal-contact{display:flex;align-items:center;gap:6px}.dark-theme .deal-contact .phone-pill{padding:6px 7px}.dark-theme .deal-contact .whatsapp-pill{padding:6px 7px}.dark-theme .deal-contact .whatsapp-pill span{font-size:8px}
 .dark-theme .priority-pill{display:inline-flex;border:1px solid #777;border-radius:99px;background:#181818;color:#eee;padding:4px 8px;font-size:9px}.dark-theme .priority-urgente,.dark-theme .priority-alta{border-color:#fff;box-shadow:0 0 6px #fff4}.dark-theme .deal-dates{display:grid;gap:4px;color:#ddd;font-size:9px}.dark-theme .row-actions{display:flex;align-items:center;gap:2px}.dark-theme .row-delete{color:#eee}.dark-theme .row-delete:hover{background:#333;color:#fff}
 .dark-theme{--orange:#eee}.dark-theme .dashboard-chart-bg path{stroke:#fff}.dark-theme .dashboard-chart-bg path+path{stroke:#bbb}.dark-theme .welcome-company,.dark-theme .animated-greeting{color:#eee}.dark-theme .forecast-label{background:#222;color:#fff;border:1px solid #777}.dark-theme .stat-icon{color:#fff!important}.dark-theme .stat-icon.orange,.dark-theme .stat-icon.blue,.dark-theme .stat-icon.green,.dark-theme .stat-icon.purple{background:#202020}
+
+/* Quadro Kanban para acompanhar as oportunidades por etapa. */
+.kanban-toolbar{margin:0 0 12px;border:1px solid #777;border-radius:9px;background:#0c0c0c;box-shadow:0 0 8px #fff2;padding:8px 12px}
+.kanban-board{display:grid;grid-template-columns:repeat(5,minmax(220px,1fr));gap:10px;overflow-x:auto;align-items:start;padding:2px 2px 12px;scrollbar-color:#777 #111}
+.kanban-column{min-height:270px;padding:9px;border:1px solid #777;border-radius:9px;background:#0b0b0b;box-shadow:0 0 7px #fff2;transition:border-color .15s,background .15s}
+.kanban-column:has(.kanban-cards:hover){border-color:#aaa}
+.kanban-column-head{display:flex;align-items:center;gap:8px;min-height:30px;padding:1px 2px 10px;border-bottom:1px solid #444;color:#f2f2f2;font-size:10px}
+.kanban-column-head .light-count{margin-left:auto}
+.kanban-stage-dot{width:8px;height:8px;border-radius:50%;background:#ddd;box-shadow:0 0 6px #fff6}
+.stage-dot-em-contato{background:#aaa}.stage-dot-proposta{background:#fff}.stage-dot-ganho{background:#eee;box-shadow:0 0 8px #fff}.stage-dot-perdido{background:#666}
+.kanban-cards{display:grid;gap:8px;padding-top:9px;min-height:210px}
+.kanban-card{padding:10px;border:1px solid #555;border-radius:8px;background:#111;box-shadow:0 0 6px #fff2;cursor:grab;transition:transform .15s,border-color .15s,box-shadow .15s}
+.kanban-card:hover{transform:translateY(-2px);border-color:#aaa;box-shadow:0 0 10px #fff3}.kanban-card:active{cursor:grabbing}
+.kanban-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}.kanban-card-top .priority-pill{font-size:8px;padding:3px 7px}
+.kanban-company{display:block;padding:0;border:0;background:transparent;color:#fff;text-align:left;font-size:11px;font-weight:700;line-height:1.4}.kanban-contact{display:block;margin-top:3px;color:#aaa;font-size:9px}
+.kanban-card-value{min-height:40px;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;margin:9px 0;padding:7px 8px;border:1px solid #383838;border-radius:6px;background:#0b0b0b}.kanban-card-value small{color:#999;font-size:8px}.kanban-card-value>b{margin-top:2px;color:#fff;font-size:12px}
+.kanban-card-meta{display:flex;justify-content:space-between;gap:6px;margin:0 0 8px;color:#aaa;font-size:8px}.kanban-card-meta span:first-child{display:flex;align-items:center;gap:4px}
+.kanban-card-actions{display:flex;align-items:center;gap:5px}.kanban-card-actions .phone-pill{padding:6px}.kanban-card-actions .whatsapp-pill{padding:6px 7px}.kanban-card-actions .whatsapp-pill span{font-size:8px}.kanban-card-actions .stage-pill{margin-left:auto;padding:4px 5px}.kanban-card-actions .stage-pill select{max-width:76px;font-size:8px}
+.kanban-empty{display:grid;min-height:74px;place-items:center;border:1px dashed #555;border-radius:7px;color:#999;font-size:9px;text-align:center;padding:10px}
+@media(max-width:560px){.kanban-toolbar{align-items:flex-start;gap:8px;flex-direction:column;padding:9px}.kanban-toolbar .table-controls{width:100%}.kanban-toolbar .search-field{flex:1;min-width:120px}.kanban-board{grid-template-columns:repeat(5,minmax(205px,82vw));gap:8px}.kanban-column{min-height:235px}}

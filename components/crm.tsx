@@ -4,13 +4,13 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   ArrowDownRight, ArrowRight, ArrowUpRight, BadgeCheck, BriefcaseBusiness,
   CalendarDays, Check, ChevronDown, CircleDollarSign, ClipboardList, Clock3,
-  Filter, LayoutDashboard, LogOut, Mail, MapPin, Menu, MessageCircle, MoreHorizontal,
+  Columns3, Filter, LayoutDashboard, LogOut, Mail, MapPin, Menu, MessageCircle, MoreHorizontal,
   Phone, Plus, Search, Sparkles, Store, Target, X,
 } from "lucide-react";
 import { isSupabaseConfigured, supabase } from "@/lib/supabase";
 import type { Opportunity, Priority, Prospect, Stage } from "@/lib/types";
 
-type View = "painel" | "oportunidades" | "salvamentos" | "prospeccao";
+type View = "painel" | "oportunidades" | "kanban" | "salvamentos" | "prospeccao";
 const TODAY = "2026-10-23";
 const stages: Stage[] = ["Novo", "Em contato", "Proposta", "Ganho", "Perdido"];
 const priorities: Priority[] = ["Baixa", "Normal", "Alta", "Urgente"];
@@ -189,6 +189,7 @@ export default function CRM() {
       <nav>
         <button className={`nav-link ${view === "painel" ? "active" : ""}`} onClick={() => { setView("painel"); setMobileNav(false); }}><LayoutDashboard size={18}/>Painel</button>
         <button className={`nav-link ${view === "oportunidades" ? "active" : ""}`} onClick={() => { setView("oportunidades"); setMobileNav(false); }}><BriefcaseBusiness size={18}/>Oportunidades<span className="nav-count">{opportunities.filter(d => !["Ganho", "Perdido"].includes(d.stage)).length}</span></button>
+        <button className={`nav-link ${view === "kanban" ? "active" : ""}`} onClick={() => { setView("kanban"); setMobileNav(false); }}><Columns3 size={18}/>Kanban<span className="nav-count muted-count">{opportunities.filter(d => !["Ganho", "Perdido"].includes(d.stage)).length}</span></button>
         <button className={`nav-link ${view === "salvamentos" ? "active" : ""}`} onClick={() => { setView("salvamentos"); setMobileNav(false); }}><ClipboardList size={18}/>Salvamentos<span className="nav-count muted-count">{opportunities.length}</span></button>
         <button className={`nav-link ${view === "prospeccao" ? "active" : ""}`} onClick={() => { setView("prospeccao"); setMobileNav(false); }}><Target size={18}/>Prospecção local<span className="nav-count muted-count">{prospects.length}</span></button>
       </nav>
@@ -219,6 +220,23 @@ export default function CRM() {
           <div className="welcome-row"><div><div className="eyebrow">PIPELINE COMERCIAL</div><h1>Oportunidades <span className="soft-count">{opportunities.length}</span></h1><p>Organize os próximos passos e acompanhe o valor em jogo.</p></div><button className="primary" onClick={() => { setEditTarget(null); setModal("deal"); }}><Plus size={17}/>Nova oportunidade</button></div>
           <div className="pipeline-mini"><div><span>Em negociação</span><b>{money(forecast)}</b></div><div><span>Oportunidades abertas</span><b>{opportunities.filter(d => !["Ganho", "Perdido"].includes(d.stage)).length}</b></div><div><span>Ganhos no mês</span><b>{money(periods.month)}</b></div></div>
           <div className="table-card full-table"><div className="table-toolbar"><div className="toolbar-title"><ClipboardList size={16}/><span>Todas as oportunidades</span><span className="light-count">{filteredDeals.length}</span></div><div className="table-controls"><label className="search-field"><Search size={15}/><input value={search} onChange={e => setSearch(e.target.value)} placeholder="Buscar cliente ou telefone..." /></label><select className="filter-select" value={stageFilter} onChange={e => setStageFilter(e.target.value)}><option>Todas as etapas</option>{stages.map(stage => <option key={stage}>{stage}</option>)}</select></div></div><DealsTable deals={filteredDeals} onStage={changeStage} onEdit={item => { setEditTarget(item); setModal("deal"); }} onSave={saveDealToList} /></div>
+        </>}
+        {view === "kanban" && <>
+          <div className="welcome-row"><div><div className="eyebrow">PIPELINE VISUAL</div><h1>Quadro Kanban <span className="soft-count">{filteredDeals.length}</span></h1><p>Acompanhe cada negócio por etapa. Arraste os cartões ou use o seletor para avançá-los.</p></div><button className="primary" onClick={() => { setEditTarget(null); setModal("deal"); }}><Plus size={17}/>Nova oportunidade</button></div>
+          <div className="table-toolbar kanban-toolbar"><div className="toolbar-title"><Columns3 size={16}/><span>Oportunidades por etapa</span></div><div className="table-controls"><label className="search-field"><Search size={15}/><input value={search} onChange={e => setSearch(e.target.value)} placeholder="Buscar negócio ou telefone..." /></label><select className="filter-select" value={stageFilter} onChange={e => setStageFilter(e.target.value)}><option>Todas as etapas</option>{stages.map(stage => <option key={stage}>{stage}</option>)}</select></div></div>
+          <div className="kanban-board">{stages.filter(stage => stageFilter === "Todas as etapas" || stageFilter === stage).map(stage => {
+            const columnDeals = filteredDeals.filter(item => item.stage === stage);
+            return <section className="kanban-column" key={stage} onDragOver={event => event.preventDefault()} onDrop={event => { event.preventDefault(); const id = event.dataTransfer.getData("text/plain"); const item = opportunities.find(deal => deal.id === id); if (item && item.stage !== stage) void changeStage(item, stage); }}>
+              <header className="kanban-column-head"><span className={`kanban-stage-dot stage-dot-${stage.toLowerCase().replace(" ", "-")}`} /> <b>{stage}</b><span className="light-count">{columnDeals.length}</span></header>
+              <div className="kanban-cards">{columnDeals.length ? columnDeals.map(item => <article className="kanban-card" key={item.id} draggable onDragStart={event => { event.dataTransfer.setData("text/plain", item.id); event.dataTransfer.effectAllowed = "move"; }}>
+                <div className="kanban-card-top"><span className={`priority-pill priority-${(item.priority || "Normal").toLowerCase()}`}>{item.priority || "Normal"}</span><button className="icon-btn row-menu" title="Editar oportunidade" onClick={() => { setEditTarget(item); setModal("deal"); }}><MoreHorizontal size={17}/></button></div>
+                <button className="kanban-company" onClick={() => { setEditTarget(item); setModal("deal"); }}>{item.company}</button><span className="kanban-contact">{item.contact || "Sem contato cadastrado"}</span>
+                <div className="kanban-card-value">{item.amount > 0 ? <><small>Valor estimado</small><b>{money(item.amount)}</b></> : <button className="amount-entry" onClick={() => { setEditTarget(item); setModal("deal"); }}><Plus size={13}/>Definir valor</button>}</div>
+                <div className="kanban-card-meta"><span><Clock3 size={12}/>Retorno: {fmtDate(item.nextContactAt)}</span><span>{item.owner}</span></div>
+                <div className="kanban-card-actions"><a className="phone-pill" href={`tel:${item.phone.replace(/[^\d+]/g, "")}`} aria-label={`Ligar para ${item.company}`}><Phone size={13}/></a><a className="whatsapp-pill" href={whatsappUrl(item.phone)} target="_blank" rel="noreferrer" aria-label={`Abrir WhatsApp para ${item.company}`}><MessageCircle size={13}/><span>WhatsApp</span></a><label className={`stage-pill stage-${item.stage.toLowerCase().replace(" ", "-")}`}><select value={item.stage} onChange={event => void changeStage(item, event.target.value as Stage)} aria-label={`Mover ${item.company} para outra etapa`}>{stages.map(option => <option key={option}>{option}</option>)}</select><ChevronDown size={12}/></label></div>
+              </article>) : <div className="kanban-empty">Solte uma oportunidade aqui</div>}</div>
+            </section>;
+          })}</div>
         </>}
         {view === "salvamentos" && <>
           <div className="welcome-row"><div><div className="eyebrow">SUAS OPORTUNIDADES</div><h1>Salvamentos <span className="soft-count">{savedDeals.length}</span></h1><p>Todas as oportunidades que você salvou, da mais recente à mais antiga.</p></div><button className="primary" onClick={() => { setEditTarget(null); setModal("deal"); }}><Plus size={17}/>Nova oportunidade</button></div>
